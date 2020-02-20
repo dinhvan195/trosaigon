@@ -1,0 +1,198 @@
+﻿@model DoAnTotNghiep.Models.Tin
+@{
+    ViewBag.Title = "ToPost";
+    Layout = "~/Views/Shared/Layout.cshtml";
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var max_fields = 10; //maximum input boxes allowed
+            var wrapper = $(".myinput"); //Fields wrapper
+            var add_button = $(".btnAddNew"); //Add button ID
+
+            var x = 0; //initlal text box count
+            $(add_button).click(function (e) { //on add input button click
+                e.preventDefault();
+                if (x < max_fields) { //max input box allowed
+                    x++; //text box increment
+                    $(wrapper).append('<div>   <input type="file" name="uploadFile['+x+']" /><a href="#" class="btnRemove">Xóa</a></div>'); //add input box
+                }
+            });
+
+            $(wrapper).on("click", ".btnRemove", function (e) { //user click on remove text
+                e.preventDefault(); $(this).parent('div').remove(); x--;
+            })
+        });
+    </script>
+}
+<div class="wrapper">
+    <!-- Navbar -->
+    @Html.Partial("_MenuCustomer")
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-12">
+                        <h4>Đăng tin mới </h4>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <!-- SELECT2 EXAMPLE -->
+                <div class="card card-default">
+                    <div class="card-header">
+                        <h3 class="card-title">Thông tin bài viết</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                        </div>
+                    </div>
+                    @using (Html.BeginForm("ToPost", "Post", FormMethod.Post, new { enctype = "multipart/form-data", T = Model, MaQuan = ViewBag.MaQuan, MaPhuong = ViewBag.MaPhuong }))
+                    {
+                    <div class="card-body">
+                        <h4 style="color:crimson">Loại tin cần đăng</h4>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Chọn Quận</label>
+                                    @Html.DropDownList("MaLoai", null, "--Chọn Loại tin--", new { @class = "form-control select2"})
+                                </div>
+                            </div>
+                        </div>
+                        <h4 style="color:crimson">Địa chỉ cho thuê</h4>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-7">
+                                <div class="form-group">
+                                    <label>Chọn Quận</label>
+                                    @Html.DropDownList("MaQuan", null, "--Chọn Quận--", new { @class = "form-control select2", @onchange = "this.form.submit();" })
+                                </div>
+
+                                <!-- /.form-group -->
+                                <div class="form-group">
+                                    <label>Chọn Phường</label>
+                                    @Html.DropDownList("MaPhuong", null, "--Chọn phường--", new { @class = "form-control select2" })
+                                </div>
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-md-5">
+                                <div id="map">
+                                    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d22171.752561816236!2d106.6931988624927!3d10.776870904349433!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1svi!2s!4v1576304054669!5m2!1svi!2s" width="350" height="350" frameborder="0" style="border:5px;border-color:black" allowfullscreen=""></iframe>
+                                </div>
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                        <!-- /.row -->
+                        <label>Địa chỉ chính xác</label>
+                        <div class="row">
+                            <div class="col-12">
+                                @Html.HiddenFor(t => t.MaQuan, 2)
+                                @Html.TextBoxFor(t => t.DiaChi, new { @class = "form-control", placeholder = "Địa chỉ củ thể và chính xác" })
+                                @Html.ValidationMessageFor(t => t.DiaChi, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <br />
+                        <h4 style="color:crimson">Thông tin chi tiết</h4>
+                        <hr />
+                        <label>Tiêu đề tin</label>
+                        <div class="row">
+                            <div class="col-12">
+                                @Html.TextBoxFor(t => t.TieuDe, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(t => t.TieuDe, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-7">
+                                <div class="form-group">
+                                    <label>Giá phòng:</label>
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(t => t.Gia, new { @class = "form-control", placeholder = "Giá thuê / 1 Tháng" })
+                                        @Html.ValidationMessageFor(t => t.Gia, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Số điện thoại liên hệ</label>
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(t => t.SDTLienHe, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(t => t.SDTLienHe, "", new { @class = "text-danger" })
+                                    </div>
+                                    <!-- /.input group -->
+                                </div>
+                                <div class="form-group">
+                                    <label>Diện tích</label>
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(t => t.DienTich, new { @class = "form-control", placeholder = " Dài rộng hoặc số m2" })
+                                        @Html.ValidationMessageFor(t => t.DienTich, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Đối tượng</label>
+                                    <div class="input-group">
+                                       @Html.DropDownList("DoiTuong", null, new { @class = "form-control select2" })
+                                    </div>
+                                    <!-- /.input group -->
+                                </div>                                
+                                <div class="form-group">
+                                    <label>Thông tin khác</label>
+                                    <div class="input-group">
+                                        @Html.TextAreaFor(t => t.MoTaChiTiet, new { @class = "form-control" })
+                                    </div>
+                                    <!-- /.input group -->
+                                </div>
+                                <div class="form-group">
+                                    <label>Ghi chú</label>
+                                    <div class="input-group">
+                                        @Html.TextAreaFor(t => t.GhiChu, new { @class = "form-control" })
+                                    </div>
+                                    <!-- /.input group -->
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <br />
+                                <div class="card card-danger">
+                                    
+                                    <div class="card-header">
+                                        <h3 class="card-title">Lưu ý khi đăng tin</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul>
+                                            <li>+ Nội dung tin phải chính xác và phù hợp với pháp luật Việt Nam</li>
+                                            <li>+ Nội dung phải viết bằng tiếng Việt có dấu</li>
+                                            <li>+ Tiêu đề tin không dài quá 100 kí tự</li>
+                                            <li>+ Các bạn nên điền đầy đủ thông tin vào các mục để tin đăng có hiệu quả hơn</li>
+                                            <li>+ Tin đăng có hình ảnh rõ ràng sẽ được xem và gọi gấp nhiều lần so với tin rao không có ảnh. Hãy đăng ảnh để được giao dịch nhanh chóng!</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h4 style="color:crimson">Hình ảnh</h4>
+                        <hr />
+                        <div class="row">
+                            <div class="col-12">
+                                <label>Chọn Ảnh: </label>
+                                <br />
+                                <div id="myinput" class="myinput">
+                                    <input type="file" name="uploadFile[0]" required /><br />
+                                </div>
+                                <br />
+                                <a class="btnAddNew" href="#">Thêm ảnh</a>
+                            </div>
+                        </div>
+                        <div class="form-group text-center">
+                            <input type="submit" value="Đăng bài viết" class="btn btn-success" style="width:40%">
+                        </div>
+                        </div>
+                    }
+                    <div class="card-footer"></div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+    </div>
+</div>
+

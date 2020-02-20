@@ -1,0 +1,87 @@
+﻿@using DoAnTotNghiep.Models
+@{
+    DBTro db = new DBTro();
+    HinhAnh a = new HinhAnh();
+}
+
+<div class="col-lg-4">
+    <div class="sidebars-area">
+        <div class="single-sidebar-widget editors-pick-widget">
+            <h6 class="title">Bài viết theo quận</h6>
+            <div class="editors-pick-post">
+                @foreach (var q in db.Quan.ToList())
+                {
+                <div class="single-list flex-row d-flex">
+                    <div class="col-9">
+                        <a href="@Url.Action("TinTheoQuan","Post",new { MaQuan=q.MaQuan})"><h6 style="margin:5px"><span class="lnr lnr-map-marker"></span> Bài viết @q.TenQuan </h6></a>
+                    </div>
+                    <div class="col-3">
+                        <span class="badge bg-info">@(db.Tin.Where(x => x.MaQuan == q.MaQuan && x.KiemDuyet==true).Count()) bài viết</span>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+        <div class="single-sidebar-widget most-popular-widget">
+            <h6 class="title">Bài viết mới</h6>
+            @foreach (Tin tnew in db.Tin.Where(x=>x.KiemDuyet==true).OrderByDescending(x => x.NgayDang).Take(4))
+            {
+                <div class="single-list flex-row d-flex">
+                    <div class="thumb">
+                        <img src="~/Images/img/@( a.DuongDan = db.HinhAnh.Where(x => x.MaTin == tnew.MaTin).First().DuongDan)" alt="" height="80" width="100">
+                    </div>
+                    <div class="details">
+                        <a href="@Url.Action("Detail","Post",new { MaTin= tnew.MaTin})">
+                            <h6>@tnew.TieuDe</h6>
+                        </a>
+                        <ul class="meta">
+                            <li><a href="#"><span class="lnr lnr-calendar-full"></span>@(DateTime.Now.Subtract(DateTime.Parse(tnew.NgayDang.ToString())).Days == 0 ? "Hôm nay" : DateTime.Now.Subtract(DateTime.Parse(tnew.NgayDang.ToString())).Days + " Ngày trước")</a></li>
+                            <li><a href="#"><span class="lnr lnr-users"></span>@tnew.DoiTuong</a></li>
+                        </ul>
+                    </div>
+                </div>
+            }
+
+        </div>
+        <div class="single-sidebar-widget most-popular-widget">
+            <h6 class="title">Bài xem nhiều</h6>
+            @foreach (Tin thot in db.Tin.Where(x => x.KiemDuyet == true).OrderByDescending(x=>x.LuotXem).Take(4))
+            {
+                <div class="single-list flex-row d-flex">
+                    <div class="thumb">
+                        <img src="~/Images/img/@( a.DuongDan = db.HinhAnh.Where(x => x.MaTin == thot.MaTin).First().DuongDan)" alt="" height="80" width="100">
+                    </div>
+                    <div class="details">
+                        <a href="@Url.Action("Detail","Post",new { MaTin= thot.MaTin})">
+                            <h6>@thot.TieuDe</h6>
+                        </a>
+                        <ul class="meta">
+                            <li><a href="#"><span class="lnr lnr-eye"></span>@thot.LuotXem Lượt xem</a></li>
+                            <li><a href="#"><span class="lnr lnr-users"></span>@thot.DoiTuong</a></li>
+                        </ul>
+                    </div>
+                </div>
+            }
+
+        </div>
+        <div class="single-sidebar-widget newsletter-widget">
+            <h6 class="title">Newsletter</h6>
+            <p>
+                Nhập Email của bạn để nhận thông báo mới nhất về website Trosaigon.com
+            </p>
+            <div class="form-group d-flex flex-row">
+                <div class="col-autos">
+                    <div class="input-group">
+                        <input class="form-control" placeholder="Email Address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email Address'" type="text">
+                    </div>
+                </div>
+                <a href="#" class="bbtns">Subcribe</a>
+            </div>
+            <p>
+                You can unsubscribe us at any time
+            </p>
+        </div>
+
+    </div>
+</div>
+

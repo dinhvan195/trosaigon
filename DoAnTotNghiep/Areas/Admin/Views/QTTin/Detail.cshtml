@@ -1,0 +1,108 @@
+﻿@model DoAnTotNghiep.Models.Tin
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAD.cshtml";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-sm-6">
+        <h2>Chi tiết bài viết</h2>
+        </div>
+        <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index","ThongKe")">Home</a></li>
+            <li class="breadcrumb-item active">Chi tiết bài viết</li>
+        </ol>
+        </div>
+    </div>
+    </div><!-- /.container-fluid -->
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <!-- Profile Image -->
+                <div class="card card-primary card-outline">
+                    <div class="card-body box-profile">
+                        <div class="text-center">
+                            <img class="profile-user-img img-fluid img-circle" src="~/Images/Avatar/@Model.ThanhVien.AnhDaiDien" alt="User profile picture">
+                        </div>
+                        <h3 class="profile-username text-center">@Model.ThanhVien.HoTen</h3>
+                        <p class="text-muted text-center">@(Model.ThanhVien.LevelAccess==1?"Admin":"Member")</p>
+                        <ul class="list-group list-group-unbordered mb-3">
+                            <li class="list-group-item">
+                                <b>Số điện thoại</b> <a class="float-right">@Model.ThanhVien.SDT</a>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Số bài đã viết</b> <a class="float-right">@Model.ThanhVien.Tin.Count()</a>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Email</b> <a class="float-right">@Model.ThanhVien.Email</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /.col -->
+            <div class="col-md-9">
+                <div class="card card-primary card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">Chi tiết bài viết</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="form-group">
+                            Tiêu đề tin : @Model.TieuDe
+                        </div>
+                        <div class="form-group">
+                            Địa chỉ : @Model.DiaChi
+                        </div>
+                        <div class="form-group">
+                            Diện tích : @Model.DienTich | Đối tượng thuê: @Model.DoiTuong |  @(DateTime.Parse(Model.NgayDang.ToString()).ToShortDateString()) 
+                        </div>
+                        <div class="form-group">
+                            Giá thuê : @Model.Gia vnđ
+                        </div>
+                        <div class="form-group">
+                            Loại tin : @Model.LoaiTin.TenLoai
+                        </div>
+                        <div class="form-group">
+                            Thông tin liên hệ : @Model.SDTLienHe
+                        </div>
+                        <div class="form-group">
+                            Mô tả chi tiết : @Model.MoTaChiTiet
+                        </div>
+                        <div class="post">
+                            hình ảnh 
+                            <hr />
+                            <div class="row mb-3">
+                                @foreach(var x in Model.HinhAnh.ToList())
+                                {
+                                <div class="col-sm-3">
+                                    <img class="img-fluid" src="~/Images/img/@x.DuongDan" alt="Photo">
+                                </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                        <div class="float-right">
+                            @if (!Model.KiemDuyet)
+                            {
+                                <a class="btn btn-success " href="@Url.Action("Duyet", "QTTin", new { MaTin = Model.MaTin })"><i class="fas fa-pencil-alt"></i> phê duyệt</a>
+                            }
+                            <a class="btn btn-info" href="@Url.Action("DuyetTin","QTTin")"> Trở lại</a>
+                        </div>
+                        <a class="btn btn-danger" href="@Url.Action("Delete","QTTin",new { MaTin = Model.MaTin })"><i class="fas fa-times"></i> Xóa</a>
+                    </div>
+                    <!-- /.card-footer -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+    </div>
+</section>

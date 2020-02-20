@@ -1,0 +1,122 @@
+﻿@model PagedList.IPagedList<DoAnTotNghiep.Models.Phuong>
+@using PagedList.Mvc;
+@using DoAnTotNghiep.Models
+@{
+    ViewBag.Title = "Phuong";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAD.cshtml";
+    DBTro db = new DBTro();
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Danh sách phường : </h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Simple Tables</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Danh sách Phường </h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        @using (Html.BeginForm("Phuong", "QTDiaChi", FormMethod.Post, new {  MaQuan = ViewBag.MaQuan }))
+                        {
+                             @Html.DropDownList("MaQuan", null,"--Chọn quận--", new { @class = "form-control select2", @onchange = "this.form.submit();" })
+                        }
+                        <br />
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th style="width: 10px">#</th>
+                                    <th>Tên Phuong</th>
+                                    <th>Số tin</th>
+                                    <th>Quận</th>
+                                    <th style="width: 20px"></th>
+
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th style="width: 10px">#</th>
+                                    <th>Tên Phường</th>
+                                    <th>Số tin</th>
+                                    <th>Quận</th>
+                                    <th style="width: 20px"></th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                @foreach (var t in Model.ToList())
+                                {
+                                    <tr>
+                                        <td>@t.MaPhuong</td>
+                                        <td>@t.TenPhuong</td>
+                                        <td style="text-align:center">@t.Tin.Count() Tin</td>
+                                        <td>@t.Quan.TenQuan</td>
+                                        <td>
+                                            @if (t.Tin.Count() == 0)
+                                            {
+                                                <a href="@Url.Action("DeleteP", "QTDiaChi", new { MaPhuong = t.MaPhuong }),">Xóa</a>
+                                            }
+                                            else
+                                            {
+                                                <strike>Xóa</strike>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer clearfix">
+                    </div>
+                </div>
+            </div>
+            <!-- /.col -->
+            <div class="col-md-5">
+                <!-- general form elements -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Thêm mới Phường </h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form action="/Admin/QTDiaChi/CreateP" method="post">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Tên Phường</label>
+                                <input type="text" class="form-control" name="TenPhuong" placeholder="Nhập tên loại">
+                            </div>
+                            <div class="form-group">
+                                @Html.DropDownList("MaQuan", null, "--Chọn quận--", new { @class = "form-control select2" })
+                            </div>
+                            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer text-right">
+                            <button type="submit" class="btn btn-primary">Thêm</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <!-- /.col -->
+        </div>
+        <div class="text-center news-tracker-wrap">
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page, CatID = ViewBag.CatID, SupID = ViewBag.SupID }))
+        </div>
+    </div><!-- /.container-fluid -->
+</section>

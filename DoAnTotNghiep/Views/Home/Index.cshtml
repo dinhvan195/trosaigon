@@ -1,0 +1,114 @@
+﻿@model PagedList.IPagedList<DoAnTotNghiep.Models.Tin>
+@using DoAnTotNghiep.Models
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Layout.cshtml";
+    DBTro db = new DBTro();
+    HinhAnh a = new HinhAnh();
+}
+<section class="top-post-area pt-10">
+    <div class="container no-padding">
+        <div class="row small-gutters">
+            <div class="col-lg-8 top-post-left">
+                <div class="feature-image-thumb relative">
+                    <div class="overlay overlay-bg"></div>
+                    <img class="img-fluid" src="~/Images/bia/tro.jpg" alt="">
+                </div>
+                <div class="top-post-details">
+                    <ul class="tags">
+                        <li><a href="@Url.Action("TinTheoQuan","Post",new { MaLoai=1})">Xem thêm</a></li>
+                    </ul>
+                    <a href="image-post.html">
+                        <h3>Phòng trọ giá rẻ phù hợp cho sinh viên</h3>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4 top-post-right">
+                <div class="single-top-post">
+                    <div class="feature-image-thumb relative">
+                        <div class="overlay overlay-bg"></div>
+                        <img class="img-fluid" src="~/Images/bia/matbang.jpg" alt="">
+                    </div>
+                    <div class="top-post-details">
+                        <ul class="tags">
+                            <li><a href="@Url.Action("TinTheoQuan","Post",new { MaLoai=4})">Xem thêm</a></li>
+                        </ul>
+                        <a href="image-post.html">
+                            <h4>Bạn đang tìm mặt bằng cho thuê ?</h4>
+                        </a>
+                    </div>
+                </div>
+                <div class="single-top-post mt-10">
+                    <div class="feature-image-thumb relative">
+                        <div class="overlay overlay-bg"></div>
+                        <img class="img-fluid" src="~/Images/bia/nguyencan.jpg" alt="">
+                    </div>
+                    <div class="top-post-details">
+                        <ul class="tags">
+                            <li><a href="@Url.Action("TinTheoQuan","Post",new { MaLoai=3})">Xem thêm</a></li>
+                        </ul>
+                        <a href="image-post.html">
+                            <h4>Nhà nguyên căn đẹp, giá cả phù hợp</h4>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@Html.Partial("_Filter")
+<section class="latest-post-area pb-120">
+    <div class="container no-padding">
+        <div class="row">
+            <div class="col-lg-8 post-list">
+                <!-- Start latest-post Area -->
+                <div class="latest-post-wrap">
+                    <h4 class="cat-title">Danh sách bài viết</h4>
+                    @foreach (var t in Model)
+                    {
+                    <div class="single-latest-post row align-items-center">
+                        <div class="col-lg-5 post-left">
+                            <div class="feature-img relative">
+                                <div class="overlay overlay-bg"></div>
+                                <img src="~/Images/img/@( a.DuongDan = db.HinhAnh.Where(x => x.MaTin == t.MaTin).First().DuongDan)" alt="" height="180" width="263">
+                            </div>
+                            <ul class="tags">
+                                <li><a href="@Url.Action("Detail","Post",new { MaTin= t.MaTin})">Chi tiết</a></li>
+                                <span style="margin-left:90px" class="badge bg-warning">@(t.HinhAnh.Count()) ảnh</span>
+                            </ul>
+                        </div>
+                        <div class="col-lg-7 post-right">
+                            
+                            <a href="@Url.Action("Detail","Post",new { MaTin= t.MaTin})"><b style="color:crimson;font-size:medium">@t.TieuDe</b></a>
+                            <ul class="meta">
+                                <li><a href="#"><span class="lnr lnr-user"></span>@t.ThanhVien.HoTen</a></li>
+                                <li><a href="#"><span class="lnr lnr-calendar-full"></span>@(DateTime.Parse(t.NgayDang.ToString()).ToShortDateString())</a></li>
+                                <li><a href="#"><span class="lnr lnr-users"></span>@t.DoiTuong</a></li>
+                            </ul>
+                            <h6>Giá thuê: <span style="color:red">@(string.Format("{0:0,0}", t.Gia))</span> Vnđ/Tháng</h6>
+                            <p class="excert">Địa Chỉ: @t.DiaChi</p>
+                            <div class="text-right">
+                                <p style="margin-right:5px"><a href="@Url.Action("LuuTin","Post",new {MaTin=@t.MaTin })"><span class="lnr lnr-bookmark"></span>Lưu tin</a></p>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    }
+                </div>
+                <div class="col-lg-12 ad-widget-wrap mt-30 mb-30">
+                    <div class="text-center news-tracker-wrap">
+                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, CatID = ViewBag.CatID, SupID = ViewBag.SupID }))
+                    </div>
+                </div>
+            </div>
+            @Html.Partial("_RSidebar")
+        </div>
+    </div>
+</section>
+
+
+
+
+
+

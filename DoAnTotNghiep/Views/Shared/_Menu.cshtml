@@ -1,0 +1,26 @@
+﻿@using DoAnTotNghiep.Models
+@{
+    DBTro db = new DBTro();
+}
+<div class="row align-items-center justify-content-between">
+    <nav id="nav-menu-container">
+        <ul class="nav-menu" style="margin-left:80px">
+            <li class="menu-active"><a href="@Url.Action("Index","Home")"><i class="lnr lnr-home"></i> Home</a></li>
+            @foreach (var l in db.LoaiTin.ToList())
+            {
+                <li><a href="@Url.Action("TinTheoQuan","Post",new { MaLoai=l.MaLoai})">@l.TenLoai</a></li>
+            }
+            <li><a href="@Url.Action("About", "Home")">About</a></li>
+            <li><a href="@Url.Action("Contact", "Home")">Contact</a></li>
+        </ul>
+    </nav>
+    <div class="navbar-right" style="margin-right:80px">
+        <ul class="nav-menu">
+            <li class="menu-has-children">
+                <a href="@Url.Action("ToPost", "Post")"><i class="lnr lnr-pencil"></i>  Đăng tin</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+

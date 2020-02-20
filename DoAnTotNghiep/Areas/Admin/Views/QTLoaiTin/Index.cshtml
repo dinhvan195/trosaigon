@@ -1,0 +1,111 @@
+﻿@model List<DoAnTotNghiep.Models.LoaiTin>
+@using DoAnTotNghiep.Models
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAD.cshtml";
+    DBTro db = new DBTro();
+
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h2>Loại bài viết</h2>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","ThongKe")">Home</a></li>
+                    <li class="breadcrumb-item active">Loại tin</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Danh sách loại</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th style="width: 10px">#</th>
+                                    <th>Tên loại</th>
+                                    <th>Tỉ lệ</th>
+                                    <th>Số tin</th>
+                                    <th style="width: 20px"></th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="2">Tổng</th>
+                                    <th style="text-align:center">
+                                        <div class="progress progress-xs">
+                                            <div class="progress-bar progress-bar-danger " style="width:100%"></div>
+                                        </div>
+                                        <span class="badge bg-danger">100 %</span>
+                                    </th>
+                                    <th style="text-align:center">@db.Tin.Where(a=>a.KiemDuyet==true).Count() Tin</th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                @foreach (var t in Model.ToList())
+                                {
+                                <tr>
+                                    <td>@t.MaLoai</td>
+                                    <td>@t.TenLoai</td>
+                                    <td style="text-align:center">
+                                        <div class="progress progress-xs">
+                                            <div class="progress-bar progress-bar-danger" style="width:@(Convert.ToInt32(Convert.ToDouble(t.Tin.Where(a=>a.KiemDuyet==true).Count()) / Convert.ToDouble(db.Tin.Where(a=>a.KiemDuyet==true).Count())*100))%"></div>
+                                        </div>
+                                        <span class="badge bg-danger">@(Convert.ToInt32(Convert.ToDouble(t.Tin.Where(a => a.KiemDuyet == true).Count()) / Convert.ToDouble(db.Tin.Where(a => a.KiemDuyet == true).Count()) * 100)) %</span>
+                                    </td>
+                                    <td style="text-align:center">@t.Tin.Where(a => a.KiemDuyet == true).Count() Tin</td>
+                                    <td>@Html.ActionLink("Xóa loại", "Delete", new { MaLoai = t.MaLoai }, new { onclick = "return confirm('Xóa loại sẽ xóa tất cả tin của loại, bạn có muốn xóa?')" })</td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer clearfix">
+                    </div>
+                </div>
+            </div>
+            <!-- /.col -->
+            <div class="col-md-5">
+                <!-- general form elements -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Thêm mới loại tin</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form action="/Admin/QTLoaiTin/Create" method="post">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Tên loại</label>
+                                <input type="text" class="form-control" name="TenLoai" placeholder="Nhập tên loại">
+                            </div>
+                            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer text-right">
+                            <button type="submit" class="btn btn-primary">Thêm</button>
+                        </div>
+                    </form>
+                </div>
+               
+            </div>
+            <!-- /.col -->
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+

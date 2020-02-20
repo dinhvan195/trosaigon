@@ -1,0 +1,99 @@
+﻿@model List<DoAnTotNghiep.Models.Tin>
+@{
+    ViewBag.Title = "DuyetTin";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAD.cshtml";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h2>Kiễm duyệt</h2>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","ThongKe")">Home</a></li>
+                    <li class="breadcrumb-item active">Kiểm duyệt</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Danh sách bài đăng cần phê duyệt</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Duyệt</th>
+                                <th>Tiêu Đề</th>
+                                <th>Người viết</th>
+                                <th>Loại tin</th>
+                                <th>Chi tiết</th>
+                                <th>Xóa</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Duyệt</th>
+                                <th>Tiêu Đề</th>
+                                <th>Người viết</th>
+                                <th>Loại tin</th>
+                                <th>Chi tiết</th>
+                                <th>Xóa</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            @foreach (var t in Model)
+                            {
+                                <tr>
+                                    <td><a class="btn btn-success btn-sm" href="@Url.Action("Duyet","QTTin",new { MaTin = t.MaTin })"><i class="fas fa-check"></i></a></td>
+                                    <td>@t.TieuDe</td>
+                                    <td>@t.ThanhVien.HoTen</td>
+                                    <td>@t.LoaiTin.TenLoai</td>
+                                    <td><a class="btn btn-primary btn-sm" href="@Url.Action("Detail","QTTin",new { MaTin = t.MaTin } )"><i class="fas fa-folder"></i></a></td>
+                                    <td><a class="btn btn-danger btn-sm" href="@Url.Action("Delete","QTTin",new { MaTin = t.MaTin })"><i class="fas fa-trash"></i></a></td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+<script src="~/Content/Admin/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="~/Content/Admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables -->
+<script src="~/Content/Admin/plugins/datatables/jquery.dataTables.js"></script>
+<script src="~/Content/Admin/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+<!-- AdminLTE App -->
+<script src="~/Content/Admin/dist/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="~/Content/Admin/dist/js/demo.js"></script>
+<!-- page script -->
+<script>
+  $(function () {
+    $("#example1").DataTable();
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+    });
+  });
+</script>
+
